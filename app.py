@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 import joblib
 import pandas as pd
 import os
+import numpy as np
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 

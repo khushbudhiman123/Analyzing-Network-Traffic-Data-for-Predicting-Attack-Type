@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attack Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔒 Attack Prediction System</h1>
+            <p>Predict network attack types using machine learning</p>
+        </header>
+
+        <div class="content">
+            <div class="controls-bar">
+                <button type="button" class="btn-sample" onclick="loadSampleNormal()">📊 Normal Traffic</button>
+                <button type="button" class="btn-sample" onclick="loadSampleDoS()">💥 DoS Attack</button>
+                <button type="button" class="btn-sample" onclick="loadSampleDDoS()">⚡ DDoS Attack</button>
+                <button type="button" class="btn-sample" onclick="clearForm()">🗑️ Clear Form</button>
+            </div>
+
+            <form id="predictionForm" class="form-container">
+                <h2>Enter Network Flow Features</h2>
+                
+                <div class="form-group">
+                    <label for="protocol">Protocol</label>
+                    <select id="protocol" name="protocol" required>
+                        <option value="">-- Select Protocol --</option>
+                        <option value="TCP">TCP</option>
+                        <option value="UDP">UDP</option>
+                        <option value="ICMP">ICMP</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="flow_duration">Flow Duration</label>
+                    <input type="number" id="flow_duration" name="flow_duration" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="total_fwd_packets">Total Forward Packets</label>
+                    <input type="number" id="total_fwd_packets" name="total_fwd_packets" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fwd_packets_length_total">Forward Packets Length Total</label>
+                    <input type="number" id="fwd_packets_length_total" name="fwd_packets_length_total" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_packets_length_total">Backward Packets Length Total</label>
+                    <input type="number" id="bwd_packets_length_total" name="bwd_packets_length_total" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fwd_packet_length_max">Forward Packet Length Max</label>
+                    <input type="number" id="fwd_packet_length_max" name="fwd_packet_length_max" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fwd_packet_length_mean">Forward Packet Length Mean</label>
+                    <input type="number" id="fwd_packet_length_mean" name="fwd_packet_length_mean" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_packet_length_max">Backward Packet Length Max</label>
+                    <input type="number" id="bwd_packet_length_max" name="bwd_packet_length_max" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_packet_length_min">Backward Packet Length Min</label>
+                    <input type="number" id="bwd_packet_length_min" name="bwd_packet_length_min" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flow_bytes/s">Flow Bytes/s</label>
+                    <input type="number" id="flow_bytes_s" name="flow_bytes/s" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flow_packets/s">Flow Packets/s</label>
+                    <input type="number" id="flow_packets_s" name="flow_packets/s" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flow_iat_mean">Flow IAT Mean</label>
+                    <input type="number" id="flow_iat_mean" name="flow_iat_mean" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flow_iat_std">Flow IAT Std</label>
+                    <input type="number" id="flow_iat_std" name="flow_iat_std" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flow_iat_min">Flow IAT Min</label>
+                    <input type="number" id="flow_iat_min" name="flow_iat_min" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fwd_iat_min">Forward IAT Min</label>
+                    <input type="number" id="fwd_iat_min" name="fwd_iat_min" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_iat_total">Backward IAT Total</label>
+                    <input type="number" id="bwd_iat_total" name="bwd_iat_total" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_iat_mean">Backward IAT Mean</label>
+                    <input type="number" id="bwd_iat_mean" name="bwd_iat_mean" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_iat_std">Backward IAT Std</label>
+                    <input type="number" id="bwd_iat_std" name="bwd_iat_std" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_iat_max">Backward IAT Max</label>
+                    <input type="number" id="bwd_iat_max" name="bwd_iat_max" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_iat_min">Backward IAT Min</label>
+                    <input type="number" id="bwd_iat_min" name="bwd_iat_min" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwd_packets/s">Backward Packets/s</label>
+                    <input type="number" id="bwd_packets_s" name="bwd_packets/s" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fin_flag_count">FIN Flag Count</label>
+                    <input type="number" id="fin_flag_count" name="fin_flag_count" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="down/up_ratio">Down/Up Ratio</label>
+                    <input type="number" id="down_up_ratio" name="down/up_ratio" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="init_fwd_win_bytes">Initial Forward Win Bytes</label>
+                    <input type="number" id="init_fwd_win_bytes" name="init_fwd_win_bytes" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="init_bwd_win_bytes">Initial Backward Win Bytes</label>
+                    <input type="number" id="init_bwd_win_bytes" name="init_bwd_win_bytes" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fwd_act_data_packets">Forward Active Data Packets</label>
+                    <input type="number" id="fwd_act_data_packets" name="fwd_act_data_packets" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fwd_seg_size_min">Forward Segment Size Min</label>
+                    <input type="number" id="fwd_seg_size_min" name="fwd_seg_size_min" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="active_mean">Active Mean</label>
+                    <input type="number" id="active_mean" name="active_mean" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="active_max">Active Max</label>
+                    <input type="number" id="active_max" name="active_max" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="active_min">Active Min</label>
+                    <input type="number" id="active_min" name="active_min" placeholder="0" min="0" step="any" required>
+                </div>
+
+                <button type="submit" class="btn-submit">🔍 Predict Attack Type</button>
+            </form>
+
+            <div id="resultContainer" class="result-container" style="display: none;">
+                <h2>Prediction Result</h2>
+                <div id="resultContent" class="result-content"></div>
+                <button type="button" class="btn-reset" onclick="resetForm()">← Back to Form</button>
+            </div>
+
+            <div id="errorContainer" class="error-container" style="display: none;">
+                <h2>Error</h2>
+                <p id="errorMessage"></p>
+                <button type="button" class="btn-reset" onclick="resetForm()">← Try Again</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>🛡️ Network Security Analytics | Powered by ML</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

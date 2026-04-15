@@ -7,9 +7,9 @@ import numpy as np
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
 # Load files
-model = joblib.load(r'C:\Users\hp\OneDrive\Desktop\ml_model_training\final_model.pkl')
-scaler = joblib.load(r'C:\Users\hp\OneDrive\Desktop\ml_model_training\scaler.pkl')
-features = joblib.load(r'C:\Users\hp\OneDrive\Desktop\ml_model_training\selected_features.pkl')
+model = joblib.load('final_model.pkl')
+scaler = joblib.load('scaler.pkl')
+features = joblib.load('selected_features.pkl')
 
 @app.route('/')
 def home():
